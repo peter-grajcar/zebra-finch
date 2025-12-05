@@ -1,0 +1,17 @@
+[project]
+name = "zebra-finch"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+package-mode=false
+requires-python = ">=3.12"
+dependencies = [
+    "onnx (>=1.19.0,<2.0.0)",
+    "onnxscript (>=0.4.0,<0.5.0)",
+    "nemo-toolkit[asr] (>=2.4.0,<3.0.0)",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.14.8",
+]
