@@ -5,7 +5,9 @@ from nemo.core import typecheck
 
 typecheck.set_typecheck_enabled(False)
 
-model = nemo_asr.models.ASRModel.from_pretrained(model_name="nvidia/parakeet-tdt-0.6b-v3")
+model = nemo_asr.models.ASRModel.from_pretrained(
+    model_name="nvidia/parakeet-tdt-0.6b-v3"
+)
 
 # B - batch size
 # C - feature dimension (MEL spectrogram)
@@ -22,10 +24,10 @@ processed_signal = torch.randn((1, 128, 1234))
 processed_signal_len = torch.zeros((1), dtype=torch.int32)
 
 # [B, U, H]
-decoder_labels = torch.randint(1, 8192, (1, 1), dtype=torch.int32)
+decoder_labels = torch.randint(1, 8192, (8, 1), dtype=torch.int32)
 
 # ([L, B, H], [L, B, H])
-decoder_state = torch.randn((2, 1, 640)), torch.randn((2, 1, 640))
+decoder_state = torch.randn((2, 8, 640)), torch.randn((2, 8, 640))
 
 # [B, T, D]
 # transposed
@@ -119,7 +121,10 @@ torch.onnx.export(
     f="weights/parakeet/encoder.forward.onnx",
     dynamo=True,
     dynamic_shapes={
-        "audio_signal": {0: batch_size, 2: torch.export.Dim('signal_length', min=9, max=8 * 625 - 6)},
+        "audio_signal": {
+            0: batch_size,
+            2: torch.export.Dim("signal_length", min=9, max=8 * 625 - 6),
+        },
         "length": {},
     },
 )
